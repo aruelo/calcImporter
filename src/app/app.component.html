@@ -1,21 +1,67 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="main-div">
+	<mat-card class='form-card'>
+		<mat-card-header>
+			<mat-card-title>Calcula los Cargos de Envío y Aduana</mat-card-title>
+			<mat-card-subtitle>(Valor Aproximado)</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<form >
+				<h3>Información del producto</h3>
+				
+				<mat-form-field class='full-width'>
+					<mat-label>Categoría</mat-label>
+					<mat-select value="ADO" name="frm_categoria">
+						<mat-option value="ADO">ARTICULOS DE OFICINA</mat-option>
+						<mat-option value="AAC">ARTE,  ANTIGUEDADES, COLECCIONES</mat-option><mat-option value="DYO">ARTICULOS DEPORTIVOS</mat-option>
+						<mat-option value="BYC">ARTICULOS PARA BEBES Y CUIDADOS</mat-option>
+						<mat-option value="AMB">AUTOS, MOTOS, BICICLETAS, ACCESORIOS</mat-option>
+						<mat-option value="AMU">AUTOS, MOTOS, BICICLETAS, ACCESORIOS USADOS</mat-option>
+					</mat-select>
+				</mat-form-field><br>
+				<mat-form-field >
+					<mat-label>Valor del Producto (US$)</mat-label>
+					<input matInput  type="text" name="frm_precio">
+				</mat-form-field><br>
+				<mat-form-field >
+						<mat-label>Peso (estimado)</mat-label>
+						<input matInput  type="text" name="frm_peso">
+				</mat-form-field>&nbsp;
+				<mat-form-field>
+					<mat-select value="kg" name="peso_unidad">
+						<mat-option value="kg">Kilogramos</mat-option>
+						<mat-option value="lbs">Libras</mat-option>
+					</mat-select>
+				</mat-form-field><br>
+				<h4>Medidas</h4>
+				<mat-form-field >
+						<mat-label>Largo</mat-label>
+						<input matInput  type="text" name="frm_lg">
+				</mat-form-field>&nbsp;
+				<mat-form-field >
+						<mat-label>Ancho</mat-label>
+						<input matInput  type="text" name="frm_an">
+				</mat-form-field><br>
+				<mat-form-field >
+						<mat-label>Profundidad</mat-label>
+						<input matInput  type="text" name="frm_prof">
+				</mat-form-field>&nbsp;
+				<mat-form-field>
+						<mat-select value="cm" name="medidas_unidad">
+							<mat-option value="cm">Centímetros</mat-option>
+							<mat-option value="pul">Pulgadas</mat-option>
+						</mat-select>
+				</mat-form-field>
+			</form>
+		</mat-card-content>
+		<mat-card-actions >
+			<button mat-button>Limpiar</button>
+			<button mat-button>Calcular</button>
+		</mat-card-actions>
+	</mat-card>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<router-outlet></router-outlet>
+
+<select name="ctl17$ComboBoxState" onchange="javascript:setTimeout('__doPostBack(\'ctl17$ComboBoxState\',\'\')', 0)" id="ctl17_ComboBoxState" class="select">
+		<mat-option selected="selected" value="Seleccione un estado">Seleccione un estado</mat-option>
+		
+	</select>
