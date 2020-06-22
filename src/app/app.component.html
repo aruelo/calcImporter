@@ -8,16 +8,18 @@
 			<form [formGroup]="_form">
 				<h3>Información del producto</h3>
 				
-				<mat-form-field class='full-width'>
-					<mat-label>Categoría</mat-label>
-					<mat-select value="ADO" formControlName="Categoria">
-						<mat-option value="ADO">ARTICULOS DE OFICINA</mat-option>
-						<mat-option value="AAC">ARTE,  ANTIGUEDADES, COLECCIONES</mat-option><mat-option value="DYO">ARTICULOS DEPORTIVOS</mat-option>
-						<mat-option value="BYC">ARTICULOS PARA BEBES Y CUIDADOS</mat-option>
-						<mat-option value="AMB">AUTOS, MOTOS, BICICLETAS, ACCESORIOS</mat-option>
-						<mat-option value="AMU">AUTOS, MOTOS, BICICLETAS, ACCESORIOS USADOS</mat-option>
-					</mat-select>
+
+				
+				<mat-form-field style= "width:500px;">
+					<mat-label>Producto</mat-label>
+					<input type="text" placeholder="Ingrese el tipo de producto (Ej: Laptop)"  matInput formControlName="Producto"  [matAutocomplete]="auto">
+					<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
+						<mat-option *ngFor="let option of filteredOptions | async" [value]="option" style="font-size:10pt;overflow:visible;line-height:20px;" (click)="stopPropagation($event)">
+							<span style='font-size:10pt'>{{ option.descripcion }}</span><br>	
+						</mat-option>
+					</mat-autocomplete>
 				</mat-form-field><br>
+				
 				<mat-form-field >
 					<mat-label>Valor del Producto (US$)</mat-label>
 					<input matInput  type="text" formControlName="Precio">
@@ -27,7 +29,7 @@
 						<input matInput  type="text" formControlName="Peso">
 				</mat-form-field>&nbsp;
 				<mat-form-field>
-					<mat-select value="kg" formControlName="Unidad_Peso">
+					<mat-select formControlName="Unidad_Peso">
 						<mat-option value="kg">Kilogramos</mat-option>
 						<mat-option value="lbs">Libras</mat-option>
 					</mat-select>
@@ -46,16 +48,16 @@
 						<input matInput  type="text" formControlName="Profundidad">
 				</mat-form-field>&nbsp;
 				<mat-form-field>
-						<mat-select value="cm" formControlName="Unidad_Medidas">
+						<mat-select value="cent" formControlName="Unidad_Medidas">
 							<mat-option value="cm">Centímetros</mat-option>
 							<mat-option value="pul">Pulgadas</mat-option>
 						</mat-select>
 				</mat-form-field>
 			</form>
 		</mat-card-content>
-		<mat-card-actions >
-			<button mat-raised-button color="warn">Limpiar</button>
-			<button mat-raised-button (click)="ss_doCalc" color="primary">Calcular</button>
+		<mat-card-actions>
+			<button type="button" mat-raised-button color="warn">Limpiar</button>
+			<button type="button" mat-raised-button (click)="_doCalc($event)" color="primary">Calcular</button>
 		</mat-card-actions>
 	</mat-card>
 </div>

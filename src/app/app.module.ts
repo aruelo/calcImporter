@@ -4,8 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatButtonModule, MatGridListModule, MatSelectModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatCardModule, MatButtonModule, MatGridListModule, MatSelectModule, MatFormFieldModule, MatInputModule,  MatAutocompleteModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -13,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AppComponent
   ],
   imports: [
+	HttpClientModule,
     BrowserModule,
     AppRoutingModule,
 	BrowserAnimationsModule,
@@ -23,9 +25,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 	MatGridListModule,
 	MatSelectModule,
 	MatInputModule,
+	MatAutocompleteModule,
 	MatFormFieldModule
   ],
-  providers: [],
+  providers: [HttpClient],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
