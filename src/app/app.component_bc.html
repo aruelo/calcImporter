@@ -1,0 +1,92 @@
+<div class="main-div">
+	<mat-card class='form-card'>
+		<mat-card-header>
+			<mat-card-title>Calcula los Cargos de Envío y Aduana</mat-card-title>
+			<mat-card-subtitle>(Valor Aproximado)</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="_form">
+				<h3>Información del producto</h3>
+				<mat-form-field style= "width:500px;">
+					<mat-label>Producto</mat-label>
+					<input type="text" placeholder="Ingrese el tipo de producto (Ej: Laptop)"  matInput formControlName="Producto"  [matAutocomplete]="auto">
+					<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" >
+						<mat-option *ngFor="let option of filteredOptions | async" [value]="option" style="font-size:10pt;overflow:visible;line-height:20px;" (click)="stopPropagation($event)">
+							<span style='font-size:10pt'>{{ option.descripcion }}</span><br>	
+						</mat-option>
+					</mat-autocomplete>
+				</mat-form-field><br>
+				
+				<mat-form-field >
+					<mat-label>Valor del Producto (US$)</mat-label>
+					<input matInput  type="text" formControlName="Precio">
+				</mat-form-field><br>
+				<mat-form-field >
+					<mat-label>Peso (estimado)</mat-label>
+					<input matInput  type="text" formControlName="Peso">
+				</mat-form-field>&nbsp;
+				<mat-form-field>
+					<mat-select formControlName="Unidad_Peso">
+						<mat-option value="kg">Kilogramos</mat-option>
+						<mat-option value="lbs">Libras</mat-option>
+					</mat-select>
+				</mat-form-field><br>
+				<h4>Medidas</h4>
+				<mat-form-field >
+					<mat-label>Largo</mat-label>
+					<input matInput  type="text" formControlName="Largo">
+				</mat-form-field>&nbsp;
+				<mat-form-field >
+					<mat-label>Ancho</mat-label>
+					<input matInput  type="text" formControlName="Ancho">
+				</mat-form-field><br>
+				<mat-form-field >
+					<mat-label>Profundidad</mat-label>
+					<input matInput  type="text" formControlName="Profundidad">
+				</mat-form-field>&nbsp;
+				<mat-form-field>
+					<mat-select value="cent" formControlName="Unidad_Medidas">
+						<mat-option value="cm">Centímetros</mat-option>
+						<mat-option value="pul">Pulgadas</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</form>
+		</mat-card-content>
+		<mat-card-actions>
+			<button type="button" mat-raised-button color="warn">Limpiar</button>
+			<button type="button" mat-raised-button (click)="_doCalc()" color="primary">Calcular</button>
+		</mat-card-actions>
+	</mat-card><br>
+	<div *ngIf="_resultadoListo">
+
+			<mat-card>
+					<mat-card-header>
+						<mat-card-title>RESULTADO US$</mat-card-title>
+					</mat-card-header>
+					<mat-card-content>
+					<table>
+						<tr>
+							<th>TOTAL ADUANA</th>
+							<td>{{_resultado.totalAduana}}</td>
+						</tr>	
+						<tr>
+							<th>ENVIO PUNTO MIO</th>
+							<td>{{_resultado.envioPM}}</td>
+						</tr>	
+						<tr>
+							<th>DESC. 1er ENVIO</th>
+							<td>{{_resultado.dtoPrimerEnvio}}</td>
+						</tr>	
+						<tr>
+							<th>SEGURO</th>
+							<td>{{_resultado.seguro}}</td>
+						</tr>	
+						<tr>
+							<th>TOTAL GENERAL</th>
+							<td>{{_resultado.totalGeneral}}</td>
+						</tr>	
+					</table>
+					</mat-card-content>
+			</mat-card>
+	</div>
+</div>

@@ -1,0 +1,64 @@
+<h1 mat-dialog-title>RESULTADO US$</h1>
+<div mat-dialog-content>
+	<mat-card>
+		<mat-card-content>
+			<table><tr><td>
+				<table cellspacing="0" cellpadding="0">
+					<tr>
+						<th>VALOR FOB</th>
+						<td>$ {{_resultado.valorFOB}}</td>
+					</tr>	
+					<tr>
+						<th>ENVIO ADUANA</th>
+						<td>$ {{_resultado.envioAduana}}</td>
+					</tr>	
+					<tr>
+						<th>SEGURO ADUANA</th>
+						<td>$ {{_resultado.seguroAduana}}</td>
+					</tr>	
+					<tr>
+						<th>ESTADISTICA</th>
+						<td>$ {{_resultado.estadistica}}</td>
+					</tr>	
+					<tr>
+						<th>ARANCELES</th>
+						<td>$ {{_resultado.aranceles}}</td>
+					</tr>	
+					<tr>
+						<th>IVA</th>
+						<td>$ {{_resultado.iva}}</td>
+					</tr>	
+					<tr>
+						<th>IMPUESTOS INTERNOS</th>
+						<td>$ {{_resultado.impuestosInternos}}</td>
+					</tr>	
+					<tr>
+						<th class='total_restaltado'>TOTAL ADUANA</th>
+						<td class='total_restaltado'>$ {{_resultado.totalAduana}}</td>
+					</tr>	
+					<tr>
+						<td colspan=2>&nbsp;</td>
+					</tr>
+					<tr>
+						<th>ENVIO PUNTO MIO</th>
+						<td>$ {{_resultado.envioPM}}</td>
+					</tr>	
+					<tr>
+						<th>SEGURO</th>
+						<td>$ {{_resultado.seguro}}</td>
+					</tr>	
+					<tr>
+						<th class='total_restaltado'>TOTAL GENERAL</th>
+						<td class='total_restaltado'>$ {{_resultado.totalGeneral}}</td>
+					</tr>	
+				</table>
+			</td>
+		</tr>
+			</table>
+	</mat-card-content>
+</mat-card>
+</div>
+<div mat-dialog-action>
+	<br>
+	<button color="warn" mat-raised-button [mat-dialog-close]="" cdkFocusInitial>CERRAR</button>
+</div>

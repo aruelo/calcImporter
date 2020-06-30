@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-
+import { MatDialog } from "@angular/material";
+import { DialogResultadoComponent } from './dialog-resultado/dialog-resultado.component'
 
 
 export class ProductoData {
@@ -27,7 +28,7 @@ export class CalcParams {
 export class CalcResultado {
 	valorFOB: number =0;
 	envioAduana:number = 0;
-	seguroAduanda:number = 0;
+	seguroAduana:number = 0;
 	baseImponibleAduana:number = 0;
 
 	iva:number= 0;
@@ -39,7 +40,10 @@ export class CalcResultado {
 	dtoPrimerEnvio:number=0;
 	seguro:number=0;
 	totalGeneral:number=0;
-	totalKilos:number;
+	totalKilos:number=0;
+	pesoDimensional:number=0;
+	pesoAUsar:number=0;
+
 
 }
 @Component({
@@ -56,22 +60,22 @@ export class AppComponent {
 	_globalParams:CalcParams = null;
 	_ProductoElegido:ProductoData;
 	_resultado:CalcResultado = new CalcResultado();
-	
+	_resultadoListo:boolean = false;
+	dlgRef:any=null;
+	_usarPesoDimensional:boolean = false;
+
 	constructor(
 		private fb: FormBuilder,
 		private http: HttpClient,
+		public dialog: MatDialog
 		
 		) {
 			this._form =  this.fb.group({
 				Producto : [null, Validators.required],
 				Precio : [null, Validators.required],
 				Peso: [null, Validators.required],
-				Unidad_Peso: ["kg", Validators.required],
-				Largo: [null, Validators.required],
-				Ancho: [null, Validators.required],
-				Profundidad: [null, Validators.required],
-				Unidad_Medidas: ["cm", Validators.required],
-			});
+				Unidad_Peso: ["kg", Validators.required]});
+			
 		}
 		ngOnInit() {
 			
@@ -84,7 +88,7 @@ export class AppComponent {
 			
 		}
 		loadParams () {
-			let adr = "http://localhost/paramscalc";
+			let adr = "http://puntomio.folkatesting.com/wp-json/calculadora/v1/parametrizados/";//"http://localhost/paramscalc";
 			this.http.get(adr).subscribe(params=> {
 				if (params) {
 					this._globalParams = new CalcParams();
@@ -94,23 +98,21 @@ export class AppComponent {
 					this._globalParams.porcSeguroAduana = params[3].importe*1;
 					this._globalParams.precioKiloSiguientes = params[4].importe*1;
 					this._globalParams.descPrimerEnvio = params[5].importe*1;
-					console.log(this._globalParams);
 				}
 			});
 		}
 
 		buscar (name) {
-			let adr = "http://localhost/pito";
+			//let adr = "http://localhost/pito";
 			
 			if (typeof name === "string") { //Filtremos la seleccion
-				
+				let adr = "http://puntomio.folkatesting.com/wp-json/calculadora/v1/nomenclador/" + name.trim();	
 				this.filteredOptions = this.http.get(adr);
 			} else {
 				this._ProductoElegido = name;	
 			}
 		}
 		stopPropagation (event) {
-			console.log(event);
 			event.stopPropagation();
 		}
 		_doCalc () {
@@ -121,13 +123,79 @@ export class AppComponent {
 			} else {
 				this._resultado.totalKilos = this._form.controls["Peso"].value*0.45359237;
 			}
+			//Peso Dimensional
+			this._resultado.pesoAUsar = this._resultado.totalKilos;
+			if (this._usarPesoDimensional) {
+				this._resultado.pesoDimensional = this._form.controls["Largo"].value*this._form.controls["Ancho"].value*this._form.controls["Profundidad"].value;
+				if (this._form.controls["Unidad_Medidas"].value=="cm") {
+					this._resultado.pesoDimensional = this._resultado.pesoDimensional / 2270.8;
+				} else {
+					this._resultado.pesoDimensional = this._resultado.pesoDimensional / 139;
+				}
+				//Peso a usar para envio Punto Mío
+				if ((this._resultado.pesoDimensional>this._resultado.totalKilos)) {
+					this._resultado.pesoAUsar = this._resultado.pesoDimensional;
+				} 
+			}
+			this._resultado.pesoAUsar = Math.ceil(this._resultado.pesoAUsar);
+
 			//CostoAduana:
 			this._resultado.envioAduana = this._resultado.totalKilos*this._globalParams.costoAduanaPorKilo;
-
+			//Seguro Aduana
+			this._resultado.seguroAduana = (this._resultado.valorFOB*this._globalParams.porcSeguroAduana/100);
+			//Base Imponible Aduana
+			this._resultado.baseImponibleAduana = this._resultado.valorFOB + this._resultado.envioAduana + this._resultado.seguroAduana;
+			//Estadistica
+			this._resultado.estadistica = (this._resultado.baseImponibleAduana * this._ProductoElegido.tasa_estadistica /100);
+			//Arancel
+			this._resultado.aranceles = (this._resultado.baseImponibleAduana * this._ProductoElegido.arancel /100);
+			//Impuestos Internos
+			this._resultado.impuestosInternos = (this._resultado.baseImponibleAduana * this._ProductoElegido.impuesto_interno /100);
+			//Iva
+			this._resultado.iva = (this._resultado.baseImponibleAduana +this._resultado.estadistica + this._resultado.aranceles)*this._ProductoElegido.iva/100;
+			//Total Aduana
+			this._resultado.totalAduana = this._resultado.iva+this._resultado.aranceles+this._resultado.impuestosInternos+this._resultado.estadistica;
+			//Envio Punto Mío
+			this._resultado.envioPM = this._globalParams.precioPrimerKilo + ((this._resultado.pesoAUsar-1)*this._globalParams.precioKiloSiguientes);
+			//Descuento primer envio
+			this._resultado.dtoPrimerEnvio = this._resultado.envioPM * this._globalParams.descPrimerEnvio/100;
+			//Seguro PM
+			this._resultado.seguro = this._resultado.valorFOB * this._globalParams.porcSeguroPM / 100;
+			this._resultado.totalGeneral = this._resultado.totalAduana + this._resultado.envioPM  + this._resultado.seguro;
+			this._resultadoListo = true;
 			console.log(this._resultado);
+			this.roundAll();
+
+			this.dlgRef = this.dialog.open(DialogResultadoComponent, {data:this._resultado});
+			
+		}
+		private roundAll () {
+			for (var k in this._resultado) {
+				if (this._resultado[k]*1!=0) {
+					this._resultado[k] = Math.round(this._resultado[k]*100)/100;
+				}
+			}
 		}
 		displayFn (campo?: ProductoData): string | undefined {
 			return campo ? campo.descripcion : undefined;
 		}
+		setPD (status) {
+			
+			if (!status) {
+				this._form.removeControl("Largo");
+				this._form.removeControl("Ancho");
+				this._form.removeControl("Profundidad");
+				this._form.removeControl("Unidad_Medidas");
+			} else {
+				this._form.addControl("Largo", new FormControl (null, Validators.required));
+				this._form.addControl("Ancho", new FormControl (null, Validators.required));
+				this._form.addControl("Profundidad", new FormControl (null, Validators.required));
+				this._form.addControl("Unidad_Medidas", new FormControl ("cm", Validators.required));
+			}
+			this._usarPesoDimensional = status;
+			console.log(this._form.invalid);
+		}	
+		
+
 	}
 	

@@ -1,26 +1,11 @@
-.form-card {
-	max-width: 700px;
-	background-color: #F8F8F8;
+td {
+	text-align:right;
 }
-.main-div{
-	height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+th {
+	text-align:left;
+	line-height: 18px;
+	font-weight: normal;
 }
-.form-card mat-card-header {
-	background: transparent !important;
-	margin: 0px;
-	font-size: 24px;	
-	color: #24292e;
-}
-.form-card  mat-card-actions {
-	text-align: center;
-}
-.full-width {
-	width: 100%;
-  }
-
 
 .mat-fab.mat-warn, .mat-flat-button.mat-warn, .mat-mini-fab.mat-warn, .mat-raised-button.mat-warn {
     color: #ea5e30;
@@ -46,7 +31,7 @@
 
 .mat-card {
     box-shadow: none;
-    background-color: #F8F8F8;
+    background: #F8F8F8;
 }
 
 .mat-fab, .mat-flat-button, .mat-mini-fab, .mat-raised-button {
@@ -54,3 +39,10 @@
     background-color: #fff;
     border: 1px solid #ea5e30 !important;
 }  
+.total_restaltado {
+	margin-top: 50px !important;
+	font-size:14pt;
+	background-color: #ea5e30;
+	color: whitesmoke;
+	padding: 5px;
+}
